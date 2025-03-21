@@ -1,0 +1,126 @@
+-------------
+ DEFINITIONS
+-------------
+
+BIT: A single piece of data that can be either on or off, represented as 1 or 0.
+
+BYTE: 8 bits. Prefixes are used to indicate a larger amount of bytes. For example, the next order of
+magnitude is a kilobyte (1024 bytes). Each new prefix is 1024 times the previous one. The order is:
+Kilo, Mega, Giga, Tera.
+
+RAM and STORAGE: Storage refers to the amount of memory a computer uses to hold data for long-term
+purposes. RAM is memory used for running applications (like games) where data is constantly being created,
+manipulated, and deleted. Unlike storage, RAM loses all its data when the computer powers off.
+
+PROGRAM: A collection of instructions that manipulate data to produce a desired result.
+
+PLATFORM: A compatible set of hardware (CPU) and software (OS, browser, etc.) that provides an environment
+for software applications to run.
+
+COMPILER: A program that 1, reads through your code and checks for anything that breaks the rules
+of C++ (errors). Then 2, translates that code into machine code (binary).
+
+ERROR: Something in your code that stops the compilation process from proceeding.
+
+WARNING: Something in your code that does not violate the rules of C++, but that the compiler detects as
+possibly being incorrect. Warnings do not halt the compilation process.
+
+OBJECT FILE: The file the compiler generates to store the machine code. Ends in ".o" or ".obj".
+
+LINKER: A program that combines the object files and produces the output file/executable. For example,
+if you define something in one file and reference it in another, the linker will connect the two. If
+that process fails, you will get a linker error.
+
+LIBRARY: A collection of pre-compiled code that has been "packaged up" for reuse in other programs.
+
+BUILDING/BUILD: Building is the term used to describe the entire process of converting your code into
+an executable to be run. The executable produced by this process is sometimes called a "build".
+
+IDE (Integrated Development Environment): A piece of software designed to make it easy to develop,
+build, and debug your programs. Usually includes...
+ - A way to easily load and save your code files
+ - Line numbers and color-coded syntax highlighting
+ - A compiler and linker to easily build your project. Some will let you install a compiler/linker of
+   your choice.
+ - An integrated debugger
+All of these can be done separately, but it's much easier to install an IDE to do it for you.
+
+PROJECT: A container that holds all of your source code files, images, data files, etc. that are needed
+to produce an executable (or library, website, etc.) that you can run or use. The project also saves
+various IDE, compiler, and linker settings, as well as remembering where you left off, so that when
+you reopen the project later, the state of the IDE can be restored to wherever you left off. Project
+files are generally IDE specific, so a project created for one IDE will need to be recreated in a
+different IDE.
+
+SOLUTION: A container that can hold one or more related projects. For example, if you were writing a
+game and wanted to have a separate executable for single player and multiplayer, you'd need to create
+two projects. Most likely, each would be configured as a separate project within a single solution. A
+solution is sometimes referred to as a workspace.
+
+CACHE: A storage location where frequently accessed data is stored for fast retrieval later. That way,
+if the program is compiled again in the future, any code file that hasn't been modified doesn't need to
+be recompiled.
+
+BUILD CONFIGURATION/TARGET: A collection of project settings that determines how your IDE will build
+your project, such as...
+ - What the executable will be named
+ - Which directories the IDE will look in for other code/libraries
+ - Whether to keep or strip debugging information
+ - How much to have the compiler optimize your program
+Some IDEs (e.g. Visual Studio) also create separate build configurations for different platforms.
+
+DEBUG CONFIGURATION: A configuration designed to help you debug your program, and is generally the one
+you will use when writing your programs. This configuration turns off all optimizations, and includes
+debugging information, which makes your programs larger and slower, but much easier to debug.
+
+RELEASE CONFIGURATION: A configuration designed to be used when releasing your program to the public.
+This version is typically optimized for size and performance, and doesn't contain the extra debugging
+information. This configuration is useful for testing the performance of your program.
+
+LANGUAGE STANDARD: An officially released version of a programming language. For example, a few language
+standards for C++ indlude C++11, C++14, C++17, etc. The number at the end represents the year that
+standard was released.
+
+------
+ TIPS
+------
+
+* C++ comes with an extensive library called "The Standard Library". You can also download custom
+libraries and use them in your projects.
+
+* To hide the file filters in the solution explorer, click the icon to the left of the wrench that
+looks like a stack of papers.
+
+* Whenever you update your project settings, (such as in the tip below) it's best to do so for all
+build configurations.
+
+* In professional environments, it's common to choose a language standard that is one or two versions
+back from the latest finalized standard. This is typically done to ensure the compiler makers have had a
+chance to resolve defects, and so that best practices for new features are well understood. This also helps
+ensure better cross-platform compatibility. For personal projects and while learning, it's recommended to
+use the latest finalized standard. To change the language standard for your project in VS, right-click on
+the project, select "Properties", then under "General", go to the "C++ Language Standard" option and change
+it. BEFORE doing this, make sure you're applying your changes to ALL configurations and platforms. You can
+check this by viewing the two drop-down boxes at the top.
+
+* The C++ standard defines rules about how programs should behave in specific circumstances. And in
+most cases, compilers will follow these rules. However, many compilers implement their own changes to
+the language, often to enhance compatibility with other versions of the language (e.g. C99), or for
+historical reasons. These compiler-specific behaviors are called compiler extensions. Because compiler
+extensions are never necessary and cause your programs to be non-compliant with C++ standards, we
+recommend turning compiler extensions off. For Visual Studio, right click on your project, and go to
+Properties > C/C++ > Language > Conformance Mode > Yes (/permissive-). Again, make sure you do this for
+ALL configurations and platforms.
+
+* Here is a run-through of what each option under the "Build" menu does:
+  - Build: Compiles all MODIFIED code files in the project or workspace/solution, and then links the
+    object files into an executable.
+  - Clean: Removes all cached objects and executables so the next time the project is built, all files
+    will be recompiled and a new executable produced.
+  - Rebuild: Does a "clean", followed by a "build".
+  - Compile: Recompiles a SINGLE code file. It does not invoke the linker or produce an executable.
+  - Run/Start: Executes the executable from a prior build. Some IDEs (e.g. Visual Studio) will invoke
+    a " befo"e doing a "run" to ensure you are running the latest version of your code.
+
+* When a program is run, all the statements in the "main" function are executed in order. That's pretty
+much it. Some programs however will do some cleanup afterwards.
