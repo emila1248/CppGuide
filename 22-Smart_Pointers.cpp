@@ -135,3 +135,4 @@ void mySwapMove(T& a, T& b)
 	a = std::move(b); // invokes move assignment
 	b = std::move(tmp); // invokes move assignment
 }
+

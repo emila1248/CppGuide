@@ -1,0 +1,7 @@
+First, make sure you're in the desired directory, then open the terminal using "ctrl + `".
+
+Type "git init" to initialize a repository.
+
+To connect this repository to a Github repository, use this command:
+"git remote add origin ________________"
+And fill in the blank with the https link to your Githhub repository.
