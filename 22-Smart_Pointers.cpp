@@ -70,3 +70,68 @@ void func2(int&& rref) { // r-value arguments will select this function
 }
 
 // This is an important part of move semantics which will be discussed soon.
+// Also note that r-value references are l-values, and you should (almost) never return either of them.
+
+/****************************************
+    MOVE CONSTRUCTORS/MOVE ASSIGNMENT
+****************************************/
+
+// C++11 defines two new functions for move semantics: a move constructor and a move assignment operator.
+// Defining a move constructor and move assignment works identically to their copy counterparts.
+/* The only difference is that the move functions use non-const rvalue reference parameters and the copy
+   functions take a (preferably const) l-value reference parameter. */
+/* The example code for this is pretty long, so go here:
+   https://www.learncpp.com/cpp-tutorial/move-constructors-and-move-assignment/
+   to see it. It's the second code snippet. */
+
+// Note that move functions should always leave both objects in a valid state.
+// In the examples from learncpp, both the move functions set a.m_ptr to nullptr.
+// This may seem extraneous, since a is a temporary r-value that will get destroyed anyway.
+/* The reason we do it is beacause when a goes out of scope, the destructor for a will be called, and
+   a.m_ptr will be deleted. */
+/* If at that point, a.m_ptr is still pointing to the same object as m_ptr, then m_ptr will be left as a
+   dangling pointer. */
+// When the object containing m_ptr eventually gets used (or destroyed), we’ll get undefined behavior.
+/* The point is, it's important to ensure the moved-from object is left in a valid state, so that it will
+   destruct properly. */
+
+// (This next part refers to line 82 in the 2nd learncpp example code linked above)
+/* In the generateResource() function of the Auto_ptr4 example above, when variable res is returned by
+   value, it is moved instead of copied, even though res is an l-value. */
+/* The C++ specification has a special rule that says automatic objects returned from a function by value
+   can be moved even if they are l-values. */
+// This makes sense, since res was going to be destroyed at the end of the function anyway.
+/* Although the compiler can move l-value return values, in some cases it may be able to do even better by
+   simply eliding the copy altogether. */
+// In such a case, neither the copy constructor nor move constructor would be called.
+
+// If you want to disable copying altogether, you can set the copy functions as "delete", like so:
+
+Auto_ptr(const Auto_ptr& a) = delete;
+Auto_ptr& operator=(const Auto_ptr& a) = delete;
+
+/* Sometimes you’ll find cases where you want to invoke move semantics, but the objects you have to work
+   with are l-values. Take this function as an example: */
+
+template <typename T>
+void mySwapCopy(T& a, T& b)
+{
+	T temp{ a }; // invokes copy constructor
+	a = b; // invokes copy assignment
+	b = temp; // invokes copy assignment
+}
+
+// Passed in two objects of type T, this function swaps their values by making three copies.
+// However, doing copies isn’t necessary here, as sll we’re trying to do is swap the values of a and b.
+// The problem here is that parameters a and b are l-value references, not r-value references.
+// C++11 lets us use std::move to cast an l-value into a type that will prefer being moved, not copied.
+// Here’s the same program as above, but with std::move:
+
+#include <utility> // Needed for std::move
+template <typename T>
+void mySwapMove(T& a, T& b)
+{
+	T tmp{ std::move(a) }; // invokes move constructor
+	a = std::move(b); // invokes move assignment
+	b = std::move(tmp); // invokes move assignment
+}
