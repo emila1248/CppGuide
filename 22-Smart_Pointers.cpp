@@ -1,3 +1,5 @@
+class SomeClass {};
+
 // Consider a function in which we dynamically allocate a value, like this:
 
 void func() {
@@ -13,11 +15,29 @@ void func() {
    of its destructor. */
 // This solution works since an object's destructor gets called when it's destroyed or goes out of scope.
 /* Essentially, consider a class whose sole job is to hold and “own” a pointer passed to it, and then
-   deallocate that pointer when the class object went out of scope. */
+   deallocate that pointer when the class object went out of scope, like this: */
+
+template <typename T>
+class SmartPointer {
+	T* ptr;
+public:
+	// Pass in a pointer to "own" via the constructor
+	SmartPointer(T* ptr=nullptr) {
+        this->ptr = ptr;
+	}
+	// The destructor will make sure it gets deallocated
+	~SmartPointer() {
+		delete ptr;
+	}
+	// Overload dereference and operator-> so we can use SmartPointer like ptr.
+	T& operator*() const { return *ptr; }
+	T* operator->() const { return ptr; }
+};
+
 // There is one problem though, and that is the assignment operator.
 // If we create a smart pointer, then create another one assigned to that pointer, like this:
 
-SmartPointer ptr1 = new SomeClass();
+SmartPointer ptr1( new SomeClass() );
 SmartPointer ptr2 = ptr1;
 
 // Both pointers are now pointing to the same set of data.
@@ -136,3 +156,82 @@ void mySwapMove(T& a, T& b)
 	b = std::move(tmp); // invokes move assignment
 }
 
+// Keep in mind that moved-from objects will be in a valid, but possibly indeterminate state.
+/* Because we can access these objects after their values have been moved, it's useful to know what value
+   they are left with. */
+// Some believee that objects that have been moved from should be reset back to a default/zero state.
+// Others believe that we should do whatever is most convenient.
+
+// std::move can also be useful when sorting an array of elements.
+// Many sorting algorithms work by swapping pairs of elements, so std::move would be useful here.
+// It can also be useful if we want to move the contents managed by one smart pointer to another.
+
+/**********************
+    UNIQUE POINTERS
+**********************/
+
+// std::unique_ptr is the C++11 replacement for std::auto_ptr.
+// It should be used to manage any dynamically allocated object that is not shared by multiple objects.
+// That is, it should completely own the object it manages, not share ownership with other classes.
+// You can access std::unique_ptr in the <memory> header.
+// Here is what one looks like:
+
+#include <memory>
+// NOTE: Always define smart pointers on the stack, since that guarantees it will go out of scope.
+std::unique_ptr<SomeClass> uniquePtr( new SomeClass() );
+
+/* Because std::unique_ptr is designed with move semantics in mind, copy initialization and copy assignment
+   are disabled. */
+// If you want to transfer the contents of std::unique_ptr, you must use move semantics.
+// std::unique_ptr also has an overloaded operator* and operator->.
+// Operator* returns a reference to the managed resource, and operator-> returns a pointer.
+/* Before we use either of these, we should check whether the std::unique_ptr actually has a resource since
+   it may not always be managing an object. */
+/* Fortunately, std::unique_ptr has a cast to bool that returns true if it is managing a resource, which can
+   be used like this: */
+
+if (uniquePtr) {
+    // Do something
+};
+
+// To get a raw pointer from a std::unique_ptr, you can use the get() member function, like this:
+
+SomeClass* regularPtr = uniquePtr.get();
+
+// Note that std::unique_ptr can be safely returned by value from a function.
+// C++14 comes with an additional function named std::make_unique().
+/* This constructs an object of the template type and initializes it with the arguments passed into the
+   function, like this: */
+
+class Fraction {
+private:
+	int num = 0;
+	int den = 1;
+public:
+	Fraction(int num = 0, int den = 1) {
+        this->num = num; this->den = den;
+	}
+};
+
+auto frac = std::make_unique<Fraction>(3, 5);
+
+// "frac" is now a unique pointer to a Fraction object.
+// Use of std::make_unique() is optional, but is recommended over creating std::unique_ptr.
+// This is mostly because it's simpler and requires less typing.
+/* It also resolves an exception safety issue that can result from C++ leaving the order of evaluation for
+   function arguments unspecified. */
+
+// There are two easy ways to misuse std::unique_ptrs.
+// The first is by letting multiple objects manage the same resource, like this:
+
+SomeClass* x( new SomeClass() );
+std::unique_ptr<SomeClass> x1(x);
+std::unique_ptr<SomeClass> x2(x);
+
+// The second is by manually deleting the resource out from underneath the std::unique_ptr, like this:
+
+SomeClass* y( new SomeClass() );
+std::unique_ptr<SomeClass> y1(y);
+delete y;
+
+// Note that std::make_unique() prevents both of the above cases from happening inadvertently.
