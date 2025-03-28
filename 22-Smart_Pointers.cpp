@@ -235,3 +235,61 @@ std::unique_ptr<SomeClass> y1(y);
 delete y;
 
 // Note that std::make_unique() prevents both of the above cases from happening inadvertently.
+
+/**********************
+    SHARED POINTERS
+**********************/
+
+// std::shared_ptr is meant to solve the case where you need multiple smart pointers co-owning a resource.
+// Internally, std::shared_ptr keeps track of how many std::shared_ptr are sharing the resource.
+/* As long as at least one std::shared_ptr is pointing to the resource, the resource will not be
+   deallocated, even if individual std::shared_ptrs are destroyed. */
+/* As soon as the last std::shared_ptr managing the resource goes out of scope (or is reassigned to point at
+   something else), the resource will be deallocated. */
+// Like std::unique_ptr, std::shared_ptr lives in the <memory> header.
+// Here is an example of a shared pointer:
+
+SomeClass* a = new SomeClass{};
+
+std::shared_ptr<SomeClass> aPtr1{ a };
+std::shared_ptr<SomeClass> aPtr2{ aPtr1 };
+
+// Note that we created a second shared pointer from the first shared pointer.
+// This is important. Consider the following similar program:
+
+SomeClass* b = new SomeClass{};
+
+std::shared_ptr<SomeClass> bPtr1{ b };
+std::shared_ptr<SomeClass> bPtr2{ b };
+
+// The difference here is that we created two std::shared_ptr independently from each other.
+// As a consequence, even though they’re both pointing to the same thing, they aren’t aware of each other.
+// When bPtr2 goes out of scope, it thinks it’s the only owner of b, and deallocates it.
+// When bPtr1 later goes out of the scope, it thinks the same thing, and tries to delete b again.
+// In conclusion: if you need more than one std::shared_ptr to a given resource, copy an existing one.
+/* Just like with std::unique_ptr, std::shared_ptr can be a null pointer, so check to make sure it is valid
+   before using it. */
+
+/* Much like std::make_unique() can be used to create a std::unique_ptr, std::make_shared() can(and should)
+   be used to make a std::shared_ptr.*/
+/* A std::unique_ptr can be converted into a std::shared_ptr via a special std::shared_ptr constructor that
+   accepts a std::unique_ptr r-value. */
+// The contents of the std::unique_ptr will be moved to the std::shared_ptr.
+// However, std::shared_ptr can not be safely converted to a std::unique_ptr.
+
+// In C++17 and earlier, std::shared_ptr does not have proper support for managing arrays.
+// As of C++20, std::shared_ptr does have support for arrays.
+
+/********************
+    WEAK POINTERS
+********************/
+
+/* std::weak_ptr was designed to solve the “cyclical ownership” problem, where following a set of pointers
+   results in going in a circle. */
+// A std::weak_ptr can observe the same object as a std::shared_ptr, but it's not considered an owner.
+
+/* Because std::weak_ptr won’t keep an owned resource alive, it’s possible for a std::weak_ptr to be left
+   pointing to a resource that has been deallocated. */
+/* However, because it has access to the reference count for an object, it can determine if it is pointing
+   to a valid object or not. */
+// The easiest way to test whether a std::weak_ptr is valid is to use the expired() member function
