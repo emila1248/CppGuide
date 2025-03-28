@@ -292,4 +292,6 @@ std::shared_ptr<SomeClass> bPtr2{ b };
    pointing to a resource that has been deallocated. */
 /* However, because it has access to the reference count for an object, it can determine if it is pointing
    to a valid object or not. */
-// The easiest way to test whether a std::weak_ptr is valid is to use the expired() member function
+// The easiest way to test whether a std::weak_ptr is valid is to use the expired() member function.
+
+#include "fakeheader"
