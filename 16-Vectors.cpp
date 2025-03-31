@@ -139,6 +139,19 @@ vec2.reserve(4);  // Changes the capacity, but not the length.
    should be preferred.*/
 // In cases where we create a temporary object to be pushed onto the vector, prefer emplace_back().
 
+// std::reference_wrapper
+// -----------------------
+/* Fixed arrays and the various standard library lists (like std::vector) can’t hold references because list
+   elements must be assignable, and references can’t be reassigned. */
+// Instead of references we could use pointers, but that opens the possibility to store/pass null pointers.
+// To solve this problem, we can use std::reference_wrapper.
+/* Essentially, std::reference_wrapper is a class that acts like a reference, but also allows assignment and
+   copying, so it’s compatible with lists.*/
+// All you really need to know are three things:
+// 1. std::reference_wrapper lives in the <functional> header.
+// 2. When you create your wrapped object, the object can’t be an anonymous object.
+// 3. To get your object back out of std::reference_wrapper, you can use the get() member function.
+
 /****************************
     COPY & MOVE SEMANTICS
 ****************************/
