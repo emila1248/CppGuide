@@ -71,3 +71,43 @@
 // Tip: A good rule of thumb is that each class should be built to accomplish a single task.
 /* That task should either be the storage and manipulation of some kind of data, OR the coordination of its
    members. Ideally not both. */
+
+/******************
+    AGGREGATION
+******************/
+
+// To qualify as an aggregation, a whole object and its parts must have the following relationship:
+// - The part (member) is part of the object (class)
+// - The part (member) can (if desired) belong to more than one object (class) at a time
+// - The part (member) does not have its existence managed by the object (class)
+// - The part (member) does not know about the existence of the object (class)
+
+/* Like a composition, an aggregation is still a part-whole relationship, where the parts are contained
+   within the whole, and it is a unidirectional relationship. */
+/* However, unlike a composition, parts can belong to more than one object at a time, and the whole object
+   is not responsible for the existence and lifespan of the parts. */
+
+// For example, consider the relationship between a person and their home address.
+// In this example, for simplicity, we’ll say every person has an address.
+/* That address can belong to more than one person at a time: for example, to both you and your roommate or
+   you and your significant other. */
+/* However, that address isn’t managed by the person; the address probably existed before the person got
+   there, and will continue to exist after the person is gone. */
+// Additionally, a person knows what address they have, but the address doesn’t know what people live there.
+
+/* Because aggregations are similar to compositions in that they are both part-whole relationships, they are
+   implemented almost identically. The difference between them is mostly semantic. */
+// In aggregation, we add parts as member variables just like in a composition.
+/* However, these member variables are typically either references or pointers that are used to point at
+   objects that have been created outside the scope of the class. */
+/* Consequently, an aggregation usually either takes the objects it is going to point to as constructor
+   parameters, or it starts empty and the sub-objects are added later. */
+
+/* Tip: Implement the simplest relationship type that meets the needs of your program, not what seems right
+   in real-life. */
+// However, composition is prefered since aggregation does not handle the deallocation of its parts.
+// Also, it's worth noting that composition and aggregation can be mixed freely within the same class.
+
+/* NOTE: Earlier, we discussed aggregate data types (such as structs and classes) as data types that group
+   multiple variables together. */
+// Despite the similarities in naming, aggregates and aggregation are different and should not be confused.
