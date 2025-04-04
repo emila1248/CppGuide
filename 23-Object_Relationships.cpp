@@ -111,3 +111,62 @@
 /* NOTE: Earlier, we discussed aggregate data types (such as structs and classes) as data types that group
    multiple variables together. */
 // Despite the similarities in naming, aggregates and aggregation are different and should not be confused.
+
+/******************
+    ASSOCIATION
+******************/
+
+// To qualify as an association, an object and another object must have the following relationship:
+// - The associated object (member) is otherwise unrelated to the object (class)
+// - The associated object (member) can belong to more than one object (class) at a time
+// - The associated object (member) does not have its existence managed by the object (class)
+// - The associated object (member) may or may not know about the existence of the object (class)
+/* In general, you should avoid bidirectional associations if a unidirectional one will do, as they add
+   complexity and tend to be harder to write without making errors. */
+// Most often, associations are implemented as pointers, where the object points at the associated object.
+
+// The relationship between doctors and patients is a great example of an association.
+// The doctor clearly has a relationship with his patients, but it’s not a part/whole relationship.
+// A doctor can see many patients in a day, and a patient can see many doctors.
+// Neither of the object’s lifespans are tied to the other.
+// We can say that association models as “uses-a” relationship.
+// The doctor “uses” the patient (to earn income) and the patient “uses” the doctor (for medical purposes).
+
+/* Sometimes objects may have a relationship with other objects of the same type. This is called a reflexive
+   association. */
+// A good example is a university course and its prerequisites (which are also university courses).
+// Consider the simple case where a course can only have one prerequisite. We can do something like this:
+
+#include <string>
+#include <string_view>
+class Course
+{
+private:
+    std::string name{};
+    const Course* prerequisite{};
+public:
+    Course(std::string_view name, const Course* prerequisite = nullptr) {
+        this->name = name;
+        this->prerequisite = prerequisite;
+    }
+};
+
+// This can lead to a chain of associations (a course has a prerequisite, which has a prerequisite, etc.).
+
+// In associations, it is not required to use pointers or references to directly link objects together.
+// Any kind of data that allows you to link two objects together suffices.
+// For example, let's say a Driver class has an association with a Car class.
+// Instead of a pointer to the Car, the Driver can have the ID number of a car in integer form.
+/* If space is limited and the number of unique objects is fairly low, referencing them by an 8-bit or
+   16-bit integer can save lots of memory since a pointer can take up 4 or 8 bytes. */
+// Here is a summary of what we discussed do far:
+
+/*************************************************************************************************
+                                          COMPOSITION      AGGREGATION      ASSOCIATION
+                                         -----------------------------------------------------
+                     Relationship Type:   whole/part       whole/part       otherwise unrelated
+Members can belong to multiple classes:   No               Yes              Yes
+   Members’ existence managed by class:   Yes              No               No
+                        Directionality:   Unidirectional   Unidirectional   Uni or bidirectional
+                     Relationship Verb:   Part-of          Has-a            Uses-a
+*************************************************************************************************/
