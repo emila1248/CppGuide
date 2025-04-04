@@ -170,3 +170,44 @@ Members can belong to multiple classes:   No               Yes              Yes
                         Directionality:   Unidirectional   Unidirectional   Uni or bidirectional
                      Relationship Verb:   Part-of          Has-a            Uses-a
 *************************************************************************************************/
+
+/*******************
+    DEPENDENCIES
+*******************/
+
+// This is the simplest of the relationships we've learned so far.
+/* In casual conversation, we use the term dependency to indicate that an object is reliant upon another
+   object for a given task. */
+// For example, if you break your foot, you are dependent on crutches to get around (but not otherwise).
+// A dependency occurs when one object invokes another object’s functionality to accomplish something.
+// A dependency is always a unidirectional relationship.
+// A good example of a dependency is std::ostream.
+// Classes use std::ostream to accomplish the task of printing something to the console, but not otherwise.
+
+/************************
+    CONTAINER CLASSES
+************************/
+
+/* In real life, we use containers all the time; your breakfast cereal comes in a box, the pages in your
+   book come in a cover and binding, etc. */
+// Without containers, it would be extremely inconvenient to work with many of these objects.
+// A container class is a class designed to hold and organize multiple instances of another type.
+// Container classes implement a "member-of" type of relationship.
+// By far, the most commonly used container in programming is the array.
+/* Although C++ has built-in array functionality, programmers will often use an array container class
+   (std::array or std::vector) instead because of the additional benefits they provide. */
+// Container classes typically implement a fairly standardized minimal set of functionality.
+// Most well-defined containers will include functions that...
+// - Create an empty container (via a constructor)
+// - Insert a new object into the container
+// - Remove an object from the container
+// - Report the number of objects currently in the container
+// - Empty the container of all objects
+// - Provide access to the stored objects
+// - Sort the elements (optional)
+
+// Container classes generally come in two different varieties: value containers and reference containers.
+/* Value containers are compositions that store copies of the objects that they are holding (and thus are
+   responsible for creating and destroying those copies). */
+/* Reference containers are aggregations that store pointers or references to other objects (and thus are
+   not responsible for creation or destruction of those objects). */
