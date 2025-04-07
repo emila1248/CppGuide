@@ -142,10 +142,10 @@
 class Course
 {
 private:
-    std::string name{};
-    const Course* prerequisite{};
+    std::string name;
+    const Course* prerequisite;
 public:
-    Course(std::string_view name, const Course* prerequisite = nullptr) {
+    Course(std::string_view name = "None", const Course* prerequisite = nullptr) {
         this->name = name;
         this->prerequisite = prerequisite;
     }
@@ -211,3 +211,4 @@ Members can belong to multiple classes:   No               Yes              Yes
    responsible for creating and destroying those copies). */
 /* Reference containers are aggregations that store pointers or references to other objects (and thus are
    not responsible for creation or destruction of those objects). */
+// Also, in C++, containers typically only hold one type of data.

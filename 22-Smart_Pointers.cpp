@@ -205,8 +205,8 @@ SomeClass* regularPtr = uniquePtr.get();
 
 class Fraction {
 private:
-	int num = 0;
-	int den = 1;
+	int num;
+	int den;
 public:
 	Fraction(int num = 0, int den = 1) {
         this->num = num; this->den = den;
