@@ -112,3 +112,79 @@ class Rectangle : private Shape {};
 // In fact, very rarely will you see or use the other types of inheritance.
 /* When you inherit a base class publicly, inherited public members stay public, and inherited protected
    members stay protected. Inherited private members stay inaccessible. */
+// Protected inheritance is so rarely used that I'm not gonna waste time on it.
+// Private inheritance means everything gets inherited privately, including public and protected members.
+/* Private inheritance can be useful when the derived class has no obvious relationship to the base class,
+   but uses the base class for implementation internally. */
+
+/***************************
+    OVERRIDING FUNCTIONS
+***************************/
+
+// By default, derived classes inherit all of the behaviors defined in a base class (obviously).
+/* When a member function is called on a derived class object, the compiler first looks to see if any
+   function with that name exists in the derived class. */
+/* If so, all overloaded functions with that name are considered, and the function overload resolution
+   process is used to determine whether there is a best match. */
+// If not, the compiler walks up the inheritance chain, checking each parent class in the same way.
+/* To modify the way a function defined in a base class works in the derived class, simply redefine the
+   function in the derived class. */
+/* Note that when you redefine a function in the derived class, the function does not inherit the access
+   specifier of the function with the same name in the base class. */
+/* Therefore, a function that is defined as private in the base class can be redefined as public in the
+   derived class, or vice-versa. */
+// Here is how you can do this:
+
+class Base {
+public:
+    int publicInt;
+    void publicFunc();
+protected:
+    int protectedInt;
+    void protectedFunc();
+};
+
+class Derived : public Base {
+public:
+    using Base::protectedInt; // From protected to public
+    using Base::protectedFunc;
+private:
+    using Base::publicInt; // From public to private
+    using Base::publicFunc;
+};
+
+// You can also make a function uncallable by setting it to "delete", like this:
+
+void publicFunc() = delete;
+
+// What if you don't want to rewrite the function, but just add additional functionality?
+// Inside the derived class function, simply call the base class function by ussing the :: operator.
+
+class Base {
+public:
+    void doSomething() {};
+};
+
+class Derived : public Base {
+    void doSomething() {
+        Base::doSomething();
+    };
+};
+
+/***************************
+    MULTIPLE INHERITANCE
+***************************/
+
+// C++ provides the ability for a derived class to inherit members from more than one parent.
+// The syntax is pretty simple:
+
+class Teacher : public Person, public Employee {};
+
+/* A mixin (also spelled “mix-in”) is a small class that can be inherited from in order to add properties
+   to a class. */
+// These classes are intended to be mixed into other classes, not instantiated on their own. For example:
+
+class Button : public Box, public Label, public Tooltip {};
+
+// Some programmers say that multiple inheritance in C++ should be avoided at all costs.
+// learncpp recommends to avoid it unless alternative solutions lead to more complexity.
