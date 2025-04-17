@@ -13,7 +13,7 @@ class Person {  // Just replace "struct" with "class" to define a class
     void sayName() { // <-- A function (also called a "method")
         std::cout << "I am " << firstName << " " << lastName << "\n";
     };
-};
+}; // NOTE: To make the return value const, place the const keyword right before the {}.
 
 // Now a "person" can "say their name" by calling the function like this:
 

@@ -188,3 +188,76 @@ class Button : public Box, public Label, public Tooltip {};
 
 // Some programmers say that multiple inheritance in C++ should be avoided at all costs.
 // learncpp recommends to avoid it unless alternative solutions lead to more complexity.
+
+/************************
+    VIRTUAL FUNCTIONS
+************************/
+
+// Let's say you have an array of type "Animal" filled with "Cat" and "Dog" objects.
+// Each animal has a "speak()" function that prints the sound each animal makes to the console.
+/* If you were to call speak() on a Cat in your Animal array, the compiler would call Animall::speak()
+   instead of Cat::speak(). */
+/* In order for the compiler to call the most derived version of your function, you must use the "virtual
+   keyword in front of the function name. */
+
+#include <iostream>
+class Animal {
+public:
+    virtual void speak() { std::cout << "idk"; }; // Keyword added for base class...
+};
+
+class Cat : public Animal {
+public:
+    virtual void speak() { std::cout << "meow"; }; // And derived class.
+};
+// Now when you call "speak()" on a Cat object in your Animal array, it will print "meow".
+
+/* You can also make a "pure" virtual function which simply acts as a placeholder in the base class to be
+   overridden by the derived class, like this: */
+
+virtual int pureVirtual() const = 0;
+
+/* Note that any class with one or more pure virtual functions becomes an abstract base class, which means
+   that it can not be instantiated. */
+
+// So why not just make all functions virtual?
+/* The answer is because it’s inefficient, since resolving a virtual function call takes longer than
+   resolving a regular one. */
+/* To make virtual functions work, the compiler has to allocate an extra pointer for each object of a class
+   that has virtual functions. */
+// This adds a lot of overhead to objects that otherwise have a small size.
+
+/* A derived class virtual function is only considered an override if its signature and return types match
+   exactly. */
+// That can lead to issues, where a function that was intended to be an override actually isn’t.
+/* To help address this, the override specifier can be applied to any virtual function to tell the compiler
+   to enforce that the function is an override. */
+/* If a function marked as override does not override a base class function (or is applied to a non-virtual
+   function), the compiler will flag it as an error. */
+// The override specifier is placed at the end of a member function declaration, right before the {}.
+/* Because there is no performance penalty for using the override specifier, all virtual override functions
+   should be tagged with it. */
+/* Additionally, because the override specifier implies virtual, there’s no need to tag functions using the
+   override specifier with the virtual keyword. */
+
+// There may be cases where you don’t want someone to be able to override a virtual function.
+// The "final" specifier can be used to tell the compiler to enforce this.
+// The final specifier gets placed directly after the override specifier.
+
+// NOTE: Always make your destructors virtual if you’re dealing with inheritance. Here's why:
+
+Derived* derived { new Derived() };
+Base* base { derived };
+delete base;
+
+// The last line of code only calls the Base destructor, but you'd want it to call both.
+// And remember, you really only need a destructor if you're dealing with dynamic memory allocation.
+
+/* Extra note: An interface class is a class that has no member variables, and all of the functions are pure
+   virtual. */
+/* Interfaces are useful when you want to define the functionality that derived classes must implement, but
+   leave the details up to the derived class. */
+
+/*********************
+    OBJECT SLICING
+*********************/
