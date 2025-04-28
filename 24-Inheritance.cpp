@@ -261,3 +261,51 @@ delete base;
 /*********************
     OBJECT SLICING
 *********************/
+
+// The assigning of a Derived class object to a Base class object is called object slicing.
+// This is because the Derived object has a Base part and a Derived part.
+// When we assign a Derived object to a Base object BY VALUE, only the Base part gets copied.
+// Used conscientiously, slicing can be benign or even intended.
+// However, used improperly, it can cause unexpected results.
+// Slicing is much more likely to occur accidentally with functions.
+
+// A common area you might run into trouble with slicing is trying to implement polymorphism with vectors.
+// For example...
+
+#include <vector>
+std::vector<Base> vec{};  // std::vector of base objects
+vec.push_back(Base{});  // add a Base object to our vector
+vec.push_back(Derived{}); // add a Derived object to our vector
+
+// Print out all of the elements in vec
+for (const auto& element : vec) {
+    std::cout << "I am a " << element.getName() << '\n';
+}
+
+/* When the program gets to our Derived object, it would print "I am a Base" (had I not been lazy and cut
+   most of the actual code). */
+/* One way to try and fix this is to create a vector of references, but the elements of a vector must be
+   assignable (references can't be reassigned, only initialized). */
+// Instead, we can use a vector of type std::reference_wrapper, or just make a vector of pointers.
+
+// Here is a quick demonstration of a "Frankenobject":
+
+Derived d1{};
+Derived d2{};
+Base& b{d2};
+
+b = d1;
+
+/* Since b points at d2, and we’re assigning d1 to b, you might think that the result would be that d1 would
+   get copied into d2 -- and it would, if b were a Derived. */
+// But b is a Base, and the operator= that C++ provides for classes isn’t virtual by default.
+// Consequently, only the Base portion of d1 is copied into d2.
+// As a result, you’ll discover that d2 now has the Base portion of d1 and the Derived portion of d2.
+// You have just created a Frankenobject -- an object composed of parts of multiple objects.
+
+/**********************
+    DYNAMIC CASTING
+**********************/
+
+/* When dealing with polymorphism, you’ll often encounter cases where you have a pointer to a base class,
+   but you want to access some information that exists only in a derived class. */

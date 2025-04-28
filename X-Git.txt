@@ -1,7 +1,18 @@
 First, make sure you're in the desired directory, then open the terminal using "ctrl + `".
 
 Type "git init" to initialize a repository.
+Type "git add ." to stage your files for commitment.
+Type "git commit -m "____" to make your first commit. Your commit message goes inside the quotes.
 
 To connect this repository to a Github repository, use this command:
 "git remote add origin ________________"
 And fill in the blank with the https link to your Githhub repository.
+Type "git status" to see the name of the branch you are in.
+If the name is "master", change it to "main" by typing "git branch -m master main".
+Type "git status" again to confirm the change.
+To start pushing your files to Github, type "git push --set-upstream origin main".
+
+TIPS:
+Typing "git branch -l" will show you all the local branches you have.
+The local branches are the branches that are stored locally, meaning on your PC.
+Typing "git branch -r" will show you all the remote branches you have, meaning the ones kept on Github.
