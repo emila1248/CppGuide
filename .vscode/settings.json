@@ -62,6 +62,7 @@
         "sstream": "cpp",
         "vector": "cpp",
         "bitset": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "fstream": "cpp"
     }
 }
