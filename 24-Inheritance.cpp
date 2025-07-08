@@ -309,3 +309,53 @@ b = d1;
 
 /* When dealing with polymorphism, you’ll often encounter cases where you have a pointer to a base class,
    but you want to access some information that exists only in a derived class. */
+/* C++ will implicitly let you convert a Derived pointer into a Base pointer. This process is sometimes
+   called upcasting. */
+/* C++ provides a casting operator named dynamic_cast that can be used for the opposite purpose, sometimes
+   called downcasting. */
+// dynamic_cast has the same syntax as static_cast:
+
+Base* getObject(bool returnDerived) { // If true, returns a BASE pointer to a DERIVED object
+	if (returnDerived)
+		return new Derived{};
+	else
+		return new Base{};
+}
+
+Base* b{getObject(true)}; // Creates a BASE pointer pointing to a DERIVED object
+
+Derived* d{dynamic_cast<Derived*>(b)}; // Creates a DERIVED pointer pointing to the same object in b
+
+// If a dynamic_cast fails, the result of the conversion will be a null pointer.
+// In order to make the program safe, we need to ensure the result of dynamic_cast actually succeeded:
+
+if (d) { // Makes sure d is not null
+    // Do something
+}
+
+/* Note that because dynamic_cast does some consistency checking at runtime, the use of it does incur a
+   performance penalty. */
+// Also, it turns out that downcasting can also be done with static_cast.
+/* However, it does no runtime type checking to ensure that what you’re doing makes sense. This makes it
+   faster, but more dangerous. */
+
+// dynamic_cast can also be used with references.
+// Because C++ does not have a “null reference”, dynamic_cast can’t return a null reference upon failure.
+// Instead, an exception of type std::bad_cast is thrown.
+
+/* There are some developers who believe dynamic_cast is evil and indicative of a bad class design, and
+   favor the use of virtual functions instead. */
+// In general, using a virtual function should be preferred over downcasting.
+// However, there are times when downcasting is the better choice:
+/*  - When you can not modify the base class to add a virtual function (e.g. because the base class is part
+     of the standard library). */
+//  - When you need access to something that is derived-class specific
+/*  - When adding a virtual function to your base class doesn’t make sense (e.g. there is no appropriate
+     value for the base class to return). */
+
+/* One more thing: Run-time type information (RTTI) is a feature of C++ that exposes information about an
+   object’s data type at runtime. */
+// Because RTTI has a pretty significant space performance cost, some compilers allow you to turn it off.
+// Needless to say, if you do this, dynamic_cast won’t function correctly.
+
+#include "fakeheader.h"
