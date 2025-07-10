@@ -194,11 +194,20 @@ Person3 harry{};    // value initialization
 /* But let's say you want to have a "Person" constructor that requires the user to provide a firstName and
    lastName, and optionally an age. You would do so like this: */
 
+Person3(std::string firstName, std::string lastName, int age = 0)
+    : firstName(firstName), lastName(lastName), age(age) {}
+
+// Or like this:
+
 Person3(std::string firstName, std::string lastName, int age = 0) {
     this->firstName = firstName;
     this->lastName = lastName;
     this->age = age;
 };
+
+// Prefer the first one. Think of it like this:
+// First method: “Build the box with exactly the right parts from the start.”
+// Second method: “Build the box with default parts, then rip them out and replace them.”
 
 /* Giving "age" a default value allows you to essentially combine two constructors into one: A constructor
    that take a firstName, lastName, and age... and a constructor that takes a firstName and lastName. */
