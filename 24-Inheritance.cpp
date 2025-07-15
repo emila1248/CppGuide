@@ -217,7 +217,7 @@ public:
 
 virtual int pureVirtual() const = 0;
 
-// In this case, the function MUST be overriden by the derived class.
+// In this case, the function MUST be overriden by the first non-abstract derived class.
 /* Note that any class with one or more pure virtual functions becomes an abstract base class, which means
    that it can not be instantiated. */
 
